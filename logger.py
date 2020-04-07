@@ -8,9 +8,10 @@ client = discord.Client()
 
 token = ""
 
+wd=""
+
 @client.event
 async def on_message(message):
-        wd=""
         if path.exists(wd+str(message.guild)):
             os.chdir(wd+str(message.guild))
         else:
