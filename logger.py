@@ -27,5 +27,9 @@ async def on_message(message):
         L=[str1 + " ",str2 + "\n",str3 + " ",str4 + "\n",str5 + "\n","\n"]
         print(L)
         File_object.writelines(L)
+        for attachment in message.attachments:
+            if not path.exists(gd+"attachments/"):
+                os.mkdir(gd+"attachments/")
+            await attachment.save(gd+"attachments/"+attachment.filename)
 client.run(token, bot=False)
 
