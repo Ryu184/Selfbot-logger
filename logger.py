@@ -1,28 +1,31 @@
 import discord, asyncio
 from os import system
 import os
-import os.path
 from os import path
+import sqlite3
 
 client = discord.Client()
-
 token = ""
-
 wd=""
 
+conn=sqlite3.connect('DiscordLog.db')
+c=conn.cursor()
+c.execute("CREATE TABLE IF NOT EXISTS Discord(Guild TEXT,Channel TEXT,Author TEXT,Date TEXT,Message TEXT)")
 @client.event
 async def on_message(message):
-        if path.exists(wd+str(message.guild)):
-            os.chdir(wd+str(message.guild))
-        else:
+        if not path.exists(wd+str(message.guild)):
             os.mkdir(wd+str(message.guild))
-        File_object = open("log"+" - "+str(message.channel),"a")
-        str1=str(message.author) + " "
-        str2=str(message.created_at) + "\n"
-        str3=str(message.guild) + " "
-        str4=str(message.channel) + "\n"
-        str5=message.content + "\n"
-        L=[str1,str2,str3,str4,str5,"\n"]
+        gd=wd+str(message.guild)+'/'
+        File_object = open(gd+"log - "+str(message.channel),"a")
+        str1=str(message.author)
+        str2=str(message.created_at)
+        str3=str(message.guild)
+        str4=str(message.channel)
+        str5=message.content
+        c.execute("INSERT INTO Discord(Guild,Channel,Author,Date,Message)VALUES (?,?,?,?,?)",(str3,str4,str1,str2,str5))
+        conn.commit()
+        L=[str1 + " ",str2 + "\n",str3 + " ",str4 + "\n",str5 + "\n","\n"]
         print(L)
         File_object.writelines(L)
 client.run(token, bot=False)
+
