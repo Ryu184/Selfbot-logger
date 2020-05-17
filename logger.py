@@ -6,7 +6,7 @@ import sqlite3
 
 client = discord.Client()
 token = ""
-wd=""
+wd=os.getcwd()
 
 conn=sqlite3.connect('DiscordLog.db')
 c=conn.cursor()
